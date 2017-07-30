@@ -11,31 +11,65 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
 	self.pushButton.clicked.connect(self.ucitaj)
+	self.pushButton_3.clicked.connect(self.dumpBaze)
 
     def ucitaj(self):
-	'''
-        self.connection = sqlite3.connect('adresar.db')
+	tekst = self.lineEdit.text()
+	self.connection = sqlite3.connect('adresar.db')
+        self.c = self.connection.cursor()	
+	print tekst
+	
+	if self.radioButton.text() == "NAZIV":
+        	if self.radioButton.isChecked() == True:
+	       		print self.radioButton.text()+" is selected"
+			result = self.c.execute(''' SELECT * FROM ADRESAR where ime LIKE '%tekst%'  ''')
+			#rows = self.c.fetchall()
+			print result
+			self.tableWidget.setRowCount(1)
+			self.tableWidget.setColumnCount(5)
+	
+			# Podesi sirinu kolona
+			self.tableWidget.setColumnWidth(0,20)
+			self.tableWidget.setColumnWidth(1,200)
+			self.tableWidget.setColumnWidth(2,200)
+			self.tableWidget.setColumnWidth(3,200)
+			self.tableWidget.setColumnWidth(4,200)
+		
+
+			for row_num, row_data in enumerate(result):
+				#self.tableWidget.insertRow(row_num)
+				for col_number, data in enumerate(row_data):
+					self.tableWidget.setItem(row_num, col_number, \
+					QtGui.QTableWidgetItem(str(data)))
+
+        if self.radioButton_2.text() == "GRAD":
+        	if self.radioButton_2.isChecked() == True:
+            		print self.radioButton_2.text()+" is selected"
+
+
+
+
+    def dumpBaze(self):
+	self.connection = sqlite3.connect('adresar.db')
         self.c = self.connection.cursor()
-        
+        result = self.c.execute(''' SELECT * FROM ADRESAR ''')
         #rows = self.c.fetchall()
 	self.tableWidget.setRowCount(1)
 	self.tableWidget.setColumnCount(5)
 	
-        #print rows
+	# Podesi sirinu kolona
+	self.tableWidget.setColumnWidth(0,20)
+	self.tableWidget.setColumnWidth(1,200)
+	self.tableWidget.setColumnWidth(2,200)
+	self.tableWidget.setColumnWidth(3,200)
+	self.tableWidget.setColumnWidth(4,200)
+        
 
 	for row_num, row_data in enumerate(result):
 		#self.tableWidget.insertRow(row_num)
 		for col_number, data in enumerate(row_data):
 			self.tableWidget.setItem(row_num, col_number, \
 			QtGui.QTableWidgetItem(str(data)))
-
-	'''
-	if self.radioButton.text() == "NAZIV":
-        	if b.isChecked() == True:
-	       		print self.radioButton.text()+" is selected"
-        if self.radioButton_2.text() == "GRAD":
-        	if b.isChecked() == True:
-            		print self.radioButton_2.text()+" is selected"
          
 
 if __name__ == "__main__":
