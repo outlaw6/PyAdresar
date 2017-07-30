@@ -22,7 +22,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 	if self.radioButton.text() == "NAZIV":
         	if self.radioButton.isChecked() == True:
 	       		print self.radioButton.text()+" is selected"
-			result = self.c.execute(''' SELECT * FROM ADRESAR where ime LIKE '%tekst%'  ''')
+			result = self.c.execute(" SELECT * FROM ADRESAR where ime LIKE ?", ('%' + str(tekst) + '%',))
 			#rows = self.c.fetchall()
 			print result
 			self.tableWidget.setRowCount(1)
