@@ -45,6 +45,24 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         if self.radioButton_2.text() == "GRAD":
         	if self.radioButton_2.isChecked() == True:
             		print self.radioButton_2.text()+" is selected"
+			result = self.c.execute(" SELECT * FROM ADRESAR where grad LIKE ?", ('%' + str(tekst) + '%',))
+			print result
+			self.tableWidget.setRowCount(1)
+			self.tableWidget.setColumnCount(5)
+
+			# Podesi sirinu kolona
+			self.tableWidget.setColumnWidth(0,20)
+			self.tableWidget.setColumnWidth(1,200)
+			self.tableWidget.setColumnWidth(2,200)
+			self.tableWidget.setColumnWidth(3,200)
+			self.tableWidget.setColumnWidth(4,200)
+		
+
+			for row_num, row_data in enumerate(result):
+				#self.tableWidget.insertRow(row_num)
+				for col_number, data in enumerate(row_data):
+					self.tableWidget.setItem(row_num, col_number, \
+					QtGui.QTableWidgetItem(str(data)))
 
 
 
@@ -53,7 +71,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 	self.connection = sqlite3.connect('adresar.db')
         self.c = self.connection.cursor()
         result = self.c.execute(''' SELECT * FROM ADRESAR ''')
-        #rows = self.c.fetchall()
+        rows = self.c.fetchall()
 	self.tableWidget.setRowCount(1)
 	self.tableWidget.setColumnCount(5)
 	
@@ -65,8 +83,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 	self.tableWidget.setColumnWidth(4,200)
         
 
-	for row_num, row_data in enumerate(result):
-		#self.tableWidget.insertRow(row_num)
+	for row_num, row_data in enumerate(rows):
+		self.tableWidget.insertRow(row_num)
 		for col_number, data in enumerate(row_data):
 			self.tableWidget.setItem(row_num, col_number, \
 			QtGui.QTableWidgetItem(str(data)))
